@@ -13,7 +13,7 @@ const NavLinks = () => {
     <React.Fragment>
       <NavLink to='/' icon={<AiFillHome />} text='Home' />
       <NavLink to='/explore' icon={<FaHashtag />} text='Explore' />
-      <NavLink to='/inbox' icon={<AiOutlineInbox />} text='Inbox' />)
+      <NavLink to='/inbox' icon={<AiOutlineInbox />} text='Inbox' />
     </React.Fragment>
   ) : (
     <React.Fragment>

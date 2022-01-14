@@ -7,18 +7,23 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link as RouterLink } from 'react-router-dom';
 import { Input } from '../../shared/components';
+import { AuthContext } from '../../shared/context/auth.context';
 import useForm from '../../shared/hooks/form-hook';
+import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
+import { User } from '../user.interface';
 
 const LoginForm = () => {
+  const auth = useContext(AuthContext);
+
   const { formState, inputHandler } = useForm(
     {
       email: {
@@ -32,12 +37,23 @@ const LoginForm = () => {
     },
     false
   );
+  const { isLoading, sendRequest } = useHttpClient();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const submitHandler = (event: React.FormEvent) => {
+  const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formState);
+
+    try {
+      const data = await sendRequest('/users/login', Methods.POST, {
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+      });
+      console.log(data);
+      auth.login(data.payload.user as User, data.payload.accessToken as string);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -85,6 +101,7 @@ const LoginForm = () => {
             errorMessage='password should be at least 6 characters'
           />
           <Button
+            isLoading={isLoading}
             w='full'
             type='submit'
             colorScheme='purple'

@@ -3,14 +3,19 @@ import {
   Avatar,
   chakra,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { AiFillBell } from 'react-icons/ai';
 import ColorModeSwitcher from './ColorModeSwitcher';
 import { AuthContext } from '../../../context/auth.context';
+import { HiOutlineLogout } from 'react-icons/hi';
 
 const NavIcons = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, user, logout } = useContext(AuthContext);
   const color = useColorModeValue('gray.800', 'inherit');
 
   return (
@@ -47,11 +52,16 @@ const NavIcons = () => {
       )}
       <ColorModeSwitcher rounded='full' />
       {isLoggedIn && (
-        <Avatar
-          size='sm'
-          name='Dan Abrahmov'
-          src='https://bit.ly/dan-abramov'
-        />
+        <Menu>
+          <MenuButton>
+            <Avatar size='sm' name={user?.username} src={user?.avatar} />
+          </MenuButton>
+          <MenuList>
+            <MenuItem icon={<HiOutlineLogout />} onClick={() => logout()}>
+              Logout
+            </MenuItem>
+          </MenuList>
+        </Menu>
       )}
     </React.Fragment>
   );
