@@ -7,7 +7,7 @@ import { LoginPage, SignUpPage } from './user/pages';
 const App = () => (
   <Router>
     <ChakraProvider theme={theme}>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/sign-up' element={<SignUpPage />} />

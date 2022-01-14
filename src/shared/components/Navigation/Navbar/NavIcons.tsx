@@ -1,7 +1,7 @@
 import React from 'react';
 import { chakra, IconButton, useColorModeValue } from '@chakra-ui/react';
 import { AiFillBell } from 'react-icons/ai';
-import { ColorModeSwitcher } from '..';
+import ColorModeSwitcher from './ColorModeSwitcher';
 
 const NavIcons = () => {
   return (

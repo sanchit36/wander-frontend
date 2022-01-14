@@ -1,12 +1,17 @@
-import React from 'react';
+import { chakra } from '@chakra-ui/react';
 import { LoginForm } from '../components';
 
 const LoginPage = () => {
   return (
-    <div>
-      Login Page
+    <chakra.main
+      d='flex'
+      flex-direction='column'
+      justifyContent='center'
+      alignItems='center'
+      h='100vh'
+    >
       <LoginForm />
-    </div>
+    </chakra.main>
   );
 };
 

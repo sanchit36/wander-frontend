@@ -1,4 +1,5 @@
-import ColorModeSwitcher from './ColorModeSwitcher';
-import Navbar from './Navbar/Navbar';
+import ColorModeSwitcher from './Navigation/Navbar/ColorModeSwitcher';
+import Navbar from './Navigation/Navbar/Navbar';
+import Input from './FormElements/Input';
 
-export { ColorModeSwitcher, Navbar };
+export { ColorModeSwitcher, Navbar, Input };
