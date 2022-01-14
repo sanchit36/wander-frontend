@@ -3,12 +3,6 @@ import {
   Button,
   chakra,
   Divider,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Stack,
   useColorModeValue,
@@ -16,102 +10,100 @@ import {
 import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link as RouterLink } from 'react-router-dom';
+import { Input } from '../../shared/components';
+import useForm from '../../shared/hooks/form-hook';
+import {
+  VALIDATOR_EMAIL,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_REQUIRE,
+} from '../../shared/utils/validators';
 
 const LoginForm = () => {
+  const { formState, inputHandler } = useForm(
+    {
+      email: {
+        value: '',
+        isValid: false,
+      },
+      password: {
+        value: '',
+        isValid: false,
+      },
+    },
+    false
+  );
+
   const [showPassword, setShowPassword] = useState(false);
 
+  const submitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(formState);
+  };
+
   return (
-    <Stack maxW='2xl' w='100%' p={{ sm: 10 }} spacing={{ md: 6 }}>
-      <Box px={[4, 0]} textAlign='center'>
-        <Heading fontSize='4xl' fontWeight='bold'>
-          Welcome back
-        </Heading>
-      </Box>
-
-      <Stack
-        px={4}
-        py={5}
-        p={[null, 6]}
-        rounded={5}
-        bg={useColorModeValue('white', 'gray.700')}
-        spacing={3}
+    <Stack
+      px={4}
+      py={5}
+      p={[null, 6]}
+      rounded={5}
+      bg={useColorModeValue('white', 'gray.700')}
+      spacing={3}
+      shadow='base'
+    >
+      <chakra.form
+        method='POST'
+        rounded={[null, 'md']}
+        overflow={{ sm: 'hidden' }}
+        onSubmit={submitHandler}
       >
-        <chakra.form
-          spacing={6}
-          as={Stack}
-          method='POST'
-          shadow='base'
-          rounded={[null, 'md']}
-          overflow={{ sm: 'hidden' }}
-        >
-          <FormControl>
-            <FormLabel
-              htmlFor='email'
-              fontSize='sm'
-              fontWeight='md'
-              color={useColorModeValue('gray.700', 'gray.50')}
-            >
-              Email address
-            </FormLabel>
-            <Input
-              type='text'
-              name='email'
-              id='email'
-              autoComplete='email'
-              mt={1}
-              focusBorderColor='brand.400'
-              shadow='sm'
-              size='sm'
-              w='full'
-              rounded='md'
-            />
-          </FormControl>
+        <Stack spacing={6}>
+          <Input
+            label='Email'
+            id='email'
+            name='email'
+            type='email'
+            onInput={inputHandler}
+            autoComplete='email'
+            validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
+            errorMessage='email is required'
+          />
 
-          <FormControl>
-            <FormLabel
-              htmlFor='password'
-              fontSize='sm'
-              fontWeight='md'
-              color={useColorModeValue('gray.700', 'gray.50')}
-            >
-              Password
-            </FormLabel>
-            <InputGroup>
-              <InputRightElement onClick={() => setShowPassword((p) => !p)}>
-                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-              </InputRightElement>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                name='password'
-                id='password'
-                autoComplete='none'
-                mt={1}
-                shadow='sm'
-                size='sm'
-                w='full'
-                rounded='md'
-              />
-            </InputGroup>
-          </FormControl>
+          <Input
+            label='Password'
+            id='password'
+            name='password'
+            type={showPassword ? 'text' : 'password'}
+            onInput={inputHandler}
+            autoComplete='none'
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            inputRightElement={
+              showPassword ? <AiFillEyeInvisible /> : <AiFillEye />
+            }
+            inputRightElementOnClick={() => {
+              setShowPassword((p) => !p);
+            }}
+            errorMessage='password should be at least 6 characters'
+          />
           <Button
             w='full'
             type='submit'
             colorScheme='purple'
             variant='solid'
             fontWeight='md'
+            disabled={!formState.isValid}
           >
             Login
           </Button>
-        </chakra.form>
+        </Stack>
+      </chakra.form>
 
-        <Divider />
-        <Box textAlign='center'>
-          Don't have an account?{' '}
-          <Link as={RouterLink} to='/sign-up'>
-            Sign Up
-          </Link>
-        </Box>
-      </Stack>
+      <Divider />
+      <Box textAlign='center'>
+        Don't have an account?{' '}
+        <Link as={RouterLink} to='/sign-up'>
+          Sign Up
+        </Link>
+      </Box>
     </Stack>
   );
 };

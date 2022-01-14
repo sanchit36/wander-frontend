@@ -1,4 +1,4 @@
-import { chakra } from '@chakra-ui/react';
+import { Box, chakra, Heading, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { SignUpForm } from '../components';
 
@@ -9,9 +9,16 @@ const SignUpPage = () => {
       flex-direction='column'
       justifyContent='center'
       alignItems='center'
-      h='100vh'
+      h='92vh'
     >
-      <SignUpForm />
+      <Stack maxW='2xl' w='100%' p={{ sm: 10 }} spacing={{ md: 6 }}>
+        <Box my={2} textAlign='center'>
+          <Heading fontSize={{ sm: '3xl', md: '5xl' }} fontWeight='bold'>
+            SIGN UP
+          </Heading>
+        </Box>
+        <SignUpForm />
+      </Stack>
     </chakra.main>
   );
 };

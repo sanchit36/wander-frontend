@@ -1,4 +1,4 @@
-import { chakra } from '@chakra-ui/react';
+import { Box, chakra, Heading, Stack } from '@chakra-ui/react';
 import { LoginForm } from '../components';
 
 const LoginPage = () => {
@@ -8,9 +8,16 @@ const LoginPage = () => {
       flex-direction='column'
       justifyContent='center'
       alignItems='center'
-      h='100vh'
+      h='92vh'
     >
-      <LoginForm />
+      <Stack maxW='2xl' w='100%' p={{ sm: 10 }} spacing={{ md: 6 }}>
+        <Box px={[4, 0]} textAlign='center'>
+          <Heading fontSize='4xl' fontWeight='bold'>
+            WELCOME BACK
+          </Heading>
+        </Box>
+        <LoginForm />
+      </Stack>
     </chakra.main>
   );
 };
