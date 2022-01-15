@@ -3,11 +3,13 @@ import {
   SignUpPage,
   VerifyEmailPage,
   VerifyEmailConfirmPage,
+  ResetPasswordPage,
+  ResetPasswordConfirmPage,
 } from '../../user/pages';
 
 interface Route {
   path: string;
-  type: 'private' | 'protected' | 'public';
+  type: 'private' | 'protected' | 'protected';
   Element: () => JSX.Element;
 }
 
@@ -24,13 +26,23 @@ const routes: Route[] = [
   },
   {
     path: '/verify-email',
-    type: 'public',
+    type: 'protected',
     Element: VerifyEmailPage,
   },
   {
-    path: '/verify-email/:token',
-    type: 'public',
+    path: '/verify-email/:userId/:token',
+    type: 'protected',
     Element: VerifyEmailConfirmPage,
+  },
+  {
+    path: '/reset-password',
+    type: 'protected',
+    Element: ResetPasswordPage,
+  },
+  {
+    path: '/reset-password/:userId/:token',
+    type: 'protected',
+    Element: ResetPasswordConfirmPage,
   },
 ];
 

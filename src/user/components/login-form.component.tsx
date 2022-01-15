@@ -5,6 +5,7 @@ import {
   Divider,
   Link,
   Stack,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
@@ -100,6 +101,9 @@ const LoginForm = () => {
             }}
             errorMessage='password should be at least 6 characters'
           />
+          <Text color='gray' textAlign='right'>
+            <RouterLink to='/reset-password'>Forgot Password?</RouterLink>
+          </Text>
           <Button
             isLoading={isLoading}
             w='full'

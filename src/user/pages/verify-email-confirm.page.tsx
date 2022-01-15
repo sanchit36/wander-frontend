@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { chakra, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
 
 const VerifyEmailConfirm = () => {
-  const { token } = useParams();
+  const { userId, token } = useParams();
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     clearError();
-    sendRequest(`/users/verify-email/${token}`, Methods.PATCH);
-  }, [sendRequest, token, clearError]);
+    sendRequest(`/users/verify-email/${userId}/${token}`, Methods.PATCH);
+  }, [clearError, sendRequest, token, userId]);
 
   return (
     <chakra.main

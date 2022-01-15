@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import axios, { AxiosRequestConfig } from 'axios';
+import { AuthContext } from '../context/auth.context';
 
 export enum Methods {
   'GET' = 'GET',
@@ -9,11 +10,35 @@ export enum Methods {
   'DELETE' = 'DELETE',
 }
 
+const baseHeaders: AxiosRequestConfig['headers'] = {
+  'Content-Type': 'application/json',
+};
+
+const ax = axios.create({
+  baseURL: 'http://localhost:5000/api',
+  headers: baseHeaders,
+  withCredentials: true,
+});
+
 export const useHttpClient = () => {
+  const { token } = useContext(AuthContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const activeHttpRequests = useRef<AbortController[]>([]);
+
+  useEffect(() => {
+    const reqInterceptor = ax.interceptors.request.use((config) => {
+      if (token) {
+        config.headers!['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    });
+    return () => {
+      ax.interceptors.request.eject(reqInterceptor);
+    };
+  }, [token]);
 
   const sendRequest = useCallback(
     async (
@@ -27,15 +52,10 @@ export const useHttpClient = () => {
       activeHttpRequests.current.push(httpAbortCtrl);
 
       try {
-        const response = await axios(uri, {
-          baseURL: 'http://localhost:5000/api',
+        const response = await ax(uri, {
           method,
           data,
-          headers: {
-            'Content-Type': 'application/json',
-            ...headers,
-          },
-          withCredentials: true,
+          headers,
           signal: httpAbortCtrl.signal,
         });
         const responseData = response.data;
