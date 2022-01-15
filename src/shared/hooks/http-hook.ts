@@ -19,7 +19,7 @@ export const useHttpClient = () => {
     async (
       uri: string,
       method: Methods = Methods.GET,
-      data: AxiosRequestConfig['data'] = null,
+      data: AxiosRequestConfig['data'] = {},
       headers: AxiosRequestConfig['headers'] = {}
     ) => {
       setIsLoading(true);
@@ -33,9 +33,9 @@ export const useHttpClient = () => {
           data,
           headers: {
             'Content-Type': 'application/json',
-            credential: 'include',
             ...headers,
           },
+          withCredentials: true,
           signal: httpAbortCtrl.signal,
         });
         const responseData = response.data;

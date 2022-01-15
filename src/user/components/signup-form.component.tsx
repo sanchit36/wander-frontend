@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import useForm from '../../shared/hooks/form-hook';
 import { Input } from '../../shared/components';
@@ -18,6 +18,7 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
+import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
 
 const SignUpForm = () => {
   const { formState, inputHandler } = useForm(
@@ -41,14 +42,29 @@ const SignUpForm = () => {
     },
     false
   );
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
 
-  const submitHandler = (event: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const { isLoading, sendRequest } = useHttpClient();
+
+  const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formState);
+
+    try {
+      const data = await sendRequest('/users/signup', Methods.POST, {
+        username: formState.inputs.username.value,
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+        passwordConfirmation: formState.inputs.passwordConfirmation.value,
+      });
+      console.log(data);
+      navigate('/verify-email');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -120,6 +136,7 @@ const SignUpForm = () => {
           />
 
           <Button
+            isLoading={isLoading}
             w='full'
             type='submit'
             colorScheme='purple'
