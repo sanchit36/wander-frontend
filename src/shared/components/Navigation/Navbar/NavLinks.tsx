@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AiFillHome, AiOutlineInbox } from 'react-icons/ai';
+import { AiFillHome } from 'react-icons/ai';
 import { FaHashtag, FaUserAlt } from 'react-icons/fa';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { AuthContext } from '../../../context/auth.context';
@@ -11,9 +11,8 @@ const NavLinks = () => {
 
   return isLoggedIn ? (
     <React.Fragment>
-      <NavLink to='/' icon={<AiFillHome />} text='Home' />
+      <NavLink to='/home' icon={<AiFillHome />} text='Home' />
       <NavLink to='/explore' icon={<FaHashtag />} text='Explore' />
-      <NavLink to='/inbox' icon={<AiOutlineInbox />} text='Inbox' />
     </React.Fragment>
   ) : (
     <React.Fragment>

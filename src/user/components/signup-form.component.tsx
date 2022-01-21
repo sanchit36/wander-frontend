@@ -5,9 +5,10 @@ import {
   Divider,
   Link,
   Stack,
+  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -19,8 +20,11 @@ import {
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
 import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
+import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
+  const { colorMode } = useColorMode();
+
   const { formState, inputHandler } = useForm(
     {
       username: {
@@ -48,7 +52,7 @@ const SignUpForm = () => {
 
   const navigate = useNavigate();
 
-  const { isLoading, sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,12 +64,21 @@ const SignUpForm = () => {
         password: formState.inputs.password.value,
         passwordConfirmation: formState.inputs.passwordConfirmation.value,
       });
-      console.log(data);
+      toast.info(data.message);
       navigate('/verify-email');
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        theme: colorMode,
+      });
+    }
+    return () => {
+      clearError();
+    };
+  }, [error, colorMode, clearError]);
 
   return (
     <Stack

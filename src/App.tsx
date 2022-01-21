@@ -1,6 +1,13 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import { useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Navbar } from './shared/components';
 import { AuthContext } from './shared/context/auth.context';
@@ -10,7 +17,7 @@ import PrivateRoute from './shared/routes/PrivateRoute';
 import ProtectedRoute from './shared/routes/ProtectedRoute';
 
 const App = () => {
-  const { login } = useContext(AuthContext);
+  const { isLoggedIn, login } = useContext(AuthContext);
   const { sendRequest } = useHttpClient();
 
   useEffect(() => {
@@ -24,6 +31,17 @@ const App = () => {
   return (
     <Router>
       <ChakraProvider theme={theme}>
+        <ToastContainer
+          position='top-right'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Navbar />
         <Routes>
           {routes.map(({ type, path, Element }) => (
@@ -45,6 +63,10 @@ const App = () => {
               }
             />
           ))}
+          <Route
+            path='/'
+            element={<Navigate replace to={isLoggedIn ? '/home' : '/login'} />}
+          />
         </Routes>
       </ChakraProvider>
     </Router>

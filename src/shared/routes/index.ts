@@ -1,3 +1,4 @@
+import { ExplorePage, HomePage } from '../../post/pages';
 import {
   LoginPage,
   SignUpPage,
@@ -9,7 +10,7 @@ import {
 
 interface Route {
   path: string;
-  type: 'private' | 'protected' | 'protected';
+  type: 'private' | 'protected' | 'public';
   Element: () => JSX.Element;
 }
 
@@ -43,6 +44,16 @@ const routes: Route[] = [
     path: '/reset-password/:userId/:token',
     type: 'protected',
     Element: ResetPasswordConfirmPage,
+  },
+  {
+    path: '/home',
+    type: 'public',
+    Element: HomePage,
+  },
+  {
+    path: '/explore',
+    type: 'public',
+    Element: ExplorePage,
   },
 ];
 

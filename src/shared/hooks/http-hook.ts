@@ -66,8 +66,13 @@ export const useHttpClient = () => {
 
         return responseData;
       } catch (error: any) {
-        setError(error.message);
-        throw error;
+        let message = error && error.response && error.response.data.message;
+        if (message === 'Duplicate key error') {
+          const keys = Object.keys(error.response.data.errors);
+          message = error.response.data.errors[keys[0]];
+        }
+        setError(message);
+        throw error && error.response && error.response.data;
       } finally {
         setIsLoading(false);
       }

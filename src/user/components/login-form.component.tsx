@@ -6,11 +6,14 @@ import {
   Link,
   Stack,
   Text,
+  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link as RouterLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { Input } from '../../shared/components';
 import { AuthContext } from '../../shared/context/auth.context';
 import useForm from '../../shared/hooks/form-hook';
@@ -24,6 +27,7 @@ import { User } from '../user.interface';
 
 const LoginForm = () => {
   const auth = useContext(AuthContext);
+  const { colorMode } = useColorMode();
 
   const { formState, inputHandler } = useForm(
     {
@@ -38,24 +42,33 @@ const LoginForm = () => {
     },
     false
   );
-  const { isLoading, sendRequest } = useHttpClient();
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    clearError();
     try {
       const data = await sendRequest('/users/login', Methods.POST, {
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
       });
-      console.log(data);
       auth.login(data.payload.user as User, data.payload.accessToken as string);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error: any) {}
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        theme: colorMode,
+      });
+    }
+    return () => {
+      clearError();
+    };
+  }, [error, colorMode, clearError]);
 
   return (
     <Stack
