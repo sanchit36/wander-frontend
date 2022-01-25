@@ -9,7 +9,7 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts }) => {
   return (
-    <chakra.div>
+    <chakra.div mt={4}>
       {posts.map((post) => (
         <Post key={post._id} post={post} />
       ))}

@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer } from 'react';
-import { validate, Validator } from '../../utils/validators';
+import React, { useEffect } from 'react';
+import { Validator } from '../../utils/validators';
 import {
   FormControl,
   FormLabel,
@@ -11,41 +11,7 @@ import {
   useColorModeValue,
   FormErrorMessage,
 } from '@chakra-ui/react';
-
-interface State {
-  value: string;
-  isValid: boolean;
-  isTouched: boolean;
-}
-interface CHANGE {
-  type: 'CHANGE';
-  val: string;
-  validators: Validator[];
-}
-
-interface TOUCH {
-  type: 'TOUCH';
-}
-
-type Action = CHANGE | TOUCH;
-
-const inputReducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'CHANGE':
-      return {
-        ...state,
-        value: action.val,
-        isValid: validate(action.val!, action.validators!),
-      };
-    case 'TOUCH':
-      return {
-        ...state,
-        isTouched: true,
-      };
-    default:
-      return state;
-  }
-};
+import useFormInput from '../../hooks/form-input';
 
 interface IInputProps extends Omit<InputProps, 'onInput'> {
   id: string;
@@ -76,11 +42,8 @@ const Input: React.FC<IInputProps> = ({
   errorMessage,
   ...props
 }) => {
-  const [inputState, dispatch] = useReducer(inputReducer, {
-    value: initialValue || '',
-    isValid: initialValid || false,
-    isTouched: false,
-  });
+  const { inputState, dispatch } = useFormInput(initialValue, initialValid);
+
   const labelColor = useColorModeValue('gray.700', 'gray.50');
 
   const { id } = props;

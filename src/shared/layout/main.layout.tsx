@@ -1,17 +1,19 @@
 import React from 'react';
-import { chakra, Container, Flex } from '@chakra-ui/react';
+import { chakra, Container, HStack } from '@chakra-ui/react';
 
 const MainLayout: React.FC = ({ children }) => {
   return (
-    <Container maxW='container.xl' minH='92vh' mt='5'>
-      <Flex flexDirection='row' minH='92vh' height='100%'>
-        <chakra.main flex='2'>{children}</chakra.main>
+    <Container maxW='container.xl' minH='92vh' my='10'>
+      <HStack minH='92vh' height='100%' alignItems='stretch'>
+        <chakra.main flex='2' pr='5'>
+          {children}
+        </chakra.main>
         <chakra.aside flex='1'>
           Side bar
           {/* sidebar */}
           {/* footer */}
         </chakra.aside>
-      </Flex>
+      </HStack>
     </Container>
   );
 };

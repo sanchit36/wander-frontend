@@ -12,6 +12,7 @@ import { FiMoreVertical } from 'react-icons/fi';
 import { FaBookmark, FaHeart, FaShare } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
 import IPost from '../post.interface';
+import Avatar from '../../shared/components/UIElements/Avatar';
 
 interface PostProps {
   post: IPost;
@@ -20,12 +21,10 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <chakra.article
-      m='auto'
       rounded='lg'
       shadow='md'
       bg={useColorModeValue('white', 'gray.800')}
       border={`1px solid ${useColorModeValue('grey', '#444')}`}
-      maxW='3xl'
     >
       <chakra.header
         p={4}
@@ -35,13 +34,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         justifyContent='space-between'
       >
         <Flex alignItems='center'>
-          <Image
-            h={10}
-            fit='cover'
-            rounded='full'
-            src={post.user.avatar}
-            alt={post.user.username}
-          />
+          <Avatar username={post.user.username} avatar={post.user.avatar} />
           <Link
             mx={2}
             fontWeight='bold'
