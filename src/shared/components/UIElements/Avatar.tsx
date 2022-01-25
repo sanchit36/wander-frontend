@@ -8,7 +8,13 @@ interface IAvatarProps extends AvatarProps {
 
 const Avatar: React.FC<IAvatarProps> = ({ username, avatar, ...props }) => {
   return (
-    <ChakraAvatar {...props} cursor='pointer' src={avatar} name={username} />
+    <ChakraAvatar
+      size='sm'
+      {...props}
+      cursor='pointer'
+      src={avatar}
+      name={username}
+    />
   );
 };
 

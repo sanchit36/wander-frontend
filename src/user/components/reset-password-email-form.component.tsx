@@ -20,11 +20,15 @@ import {
 } from '../../shared/utils/validators';
 
 const ResetPasswordEmailFrom = () => {
-  const { formState, inputHandler } = useForm(
+  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
     {
       email: {
         value: '',
         isValid: false,
+        validators: [
+          VALIDATOR_REQUIRE('email is required'),
+          VALIDATOR_EMAIL('please provide a valid email address'),
+        ],
       },
     },
     false
@@ -76,10 +80,11 @@ const ResetPasswordEmailFrom = () => {
               id='email'
               name='email'
               type='email'
-              onInput={inputHandler}
               autoComplete='email'
-              validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
-              errorMessage='Email is required'
+              value={formState.inputs.email}
+              onChange={inputChangeHandler}
+              onBlur={inputBlurHandler}
+              errorMessage={formState.errors.email}
             />
 
             <Button
@@ -89,7 +94,7 @@ const ResetPasswordEmailFrom = () => {
               colorScheme='purple'
               variant='solid'
               fontWeight='md'
-              disabled={!formState.isValid}
+              disabled={!formState.isFormValid}
             >
               Send Email
             </Button>

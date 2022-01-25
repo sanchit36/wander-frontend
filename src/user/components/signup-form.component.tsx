@@ -25,23 +25,31 @@ import { toast } from 'react-toastify';
 const SignUpForm = () => {
   const { colorMode } = useColorMode();
 
-  const { formState, inputHandler } = useForm(
+  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
     {
       username: {
         value: '',
         isValid: false,
+        validators: [VALIDATOR_REQUIRE('username is required')],
       },
       email: {
         value: '',
         isValid: false,
+        validators: [VALIDATOR_REQUIRE('email is required'), VALIDATOR_EMAIL()],
       },
       password: {
         value: '',
         isValid: false,
+        validators: [
+          VALIDATOR_MINLENGTH(6, 'password should be at least 6 characters'),
+        ],
       },
       passwordConfirmation: {
         value: '',
         isValid: false,
+        validators: [
+          VALIDATOR_MINLENGTH(6, 'password should be at least 6 characters'),
+        ],
       },
     },
     false
@@ -97,10 +105,11 @@ const SignUpForm = () => {
             id='username'
             name='username'
             type='text'
-            onInput={inputHandler}
             autoComplete='username'
-            validators={[VALIDATOR_REQUIRE()]}
-            errorMessage='username is required'
+            value={formState.inputs.username}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.username}
           />
 
           <Input
@@ -108,10 +117,11 @@ const SignUpForm = () => {
             id='email'
             name='email'
             type='email'
-            onInput={inputHandler}
             autoComplete='email'
-            validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
-            errorMessage='email is required'
+            value={formState.inputs.email}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.email}
           />
 
           <Input
@@ -119,16 +129,17 @@ const SignUpForm = () => {
             id='password'
             name='password'
             type={showPassword ? 'text' : 'password'}
-            onInput={inputHandler}
             autoComplete='none'
-            validators={[VALIDATOR_MINLENGTH(6)]}
             inputRightElement={
               showPassword ? <AiFillEyeInvisible /> : <AiFillEye />
             }
             inputRightElementOnClick={() => {
               setShowPassword((p) => !p);
             }}
-            errorMessage='password should be at least 6 characters'
+            value={formState.inputs.password}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.password}
           />
 
           <Input
@@ -136,16 +147,17 @@ const SignUpForm = () => {
             id='passwordConfirmation'
             name='passwordConfirmation'
             type={showPassword ? 'text' : 'password'}
-            onInput={inputHandler}
             autoComplete='none'
-            validators={[VALIDATOR_MINLENGTH(6)]}
             inputRightElement={
               showPasswordConfirmation ? <AiFillEyeInvisible /> : <AiFillEye />
             }
             inputRightElementOnClick={() => {
               setShowPasswordConfirmation((p) => !p);
             }}
-            errorMessage='passwords does not match'
+            value={formState.inputs.passwordConfirmation}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.passwordConfirmation}
           />
 
           <Button
@@ -155,7 +167,7 @@ const SignUpForm = () => {
             colorScheme='purple'
             variant='solid'
             fontWeight='md'
-            disabled={!formState.isValid}
+            disabled={!formState.isFormValid}
           >
             Sign Up
           </Button>

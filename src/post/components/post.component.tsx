@@ -25,22 +25,27 @@ const Post: React.FC<PostProps> = ({ post }) => {
       shadow='md'
       bg={useColorModeValue('white', 'gray.800')}
       border={`1px solid ${useColorModeValue('grey', '#444')}`}
+      my='5'
     >
       <chakra.header
-        p={4}
+        px={4}
+        py={2}
         borderBottom={`1px solid ${useColorModeValue('grey', '#444')}`}
         display='flex'
         alignItems='center'
         justifyContent='space-between'
       >
         <Flex alignItems='center'>
-          <Avatar username={post.user.username} avatar={post.user.avatar} />
+          <Avatar
+            username={post.creator.username}
+            avatar={post.creator.avatar}
+          />
           <Link
             mx={2}
             fontWeight='bold'
             color={useColorModeValue('gray.700', 'gray.200')}
           >
-            {post.user.username}
+            {post.creator.username}
           </Link>
         </Flex>
         <IconButton
@@ -50,7 +55,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
         />
       </chakra.header>
 
-      <Image w='full' h='400px' fit='cover' src={post.image} alt='Article' />
+      {post.image && (
+        <Image w='full' h='400px' fit='cover' src={post.image} alt='Article' />
+      )}
 
       <chakra.main p={4}>
         <chakra.p

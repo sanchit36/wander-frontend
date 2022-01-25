@@ -10,11 +10,17 @@ import { VALIDATOR_MINLENGTH } from '../../shared/utils/validators';
 const ResetPasswordForm = () => {
   const { userId, token } = useParams();
 
-  const { formState, inputHandler } = useForm(
+  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
     {
       password: {
         value: '',
         isValid: false,
+        validators: [
+          VALIDATOR_MINLENGTH(
+            6,
+            'Password should be at least 6 characters long'
+          ),
+        ],
       },
     },
     false
@@ -60,10 +66,11 @@ const ResetPasswordForm = () => {
             id='password'
             name='password'
             type='password'
-            onInput={inputHandler}
             autoComplete='password'
-            validators={[VALIDATOR_MINLENGTH(6)]}
-            errorMessage='Password should be at least 6 characters long'
+            value={formState.inputs.password}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.username}
           />
 
           <Button
@@ -73,7 +80,7 @@ const ResetPasswordForm = () => {
             colorScheme='purple'
             variant='solid'
             fontWeight='md'
-            disabled={!formState.isValid}
+            disabled={!formState.isFormValid}
           >
             Submit
           </Button>

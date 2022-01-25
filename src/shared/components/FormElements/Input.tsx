@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { Validator } from '../../utils/validators';
+import React from 'react';
 import {
   FormControl,
   FormLabel,
@@ -11,64 +10,37 @@ import {
   useColorModeValue,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import useFormInput from '../../hooks/form-input';
+import { InputValue } from '../../hooks/form-hook';
 
-interface IInputProps extends Omit<InputProps, 'onInput'> {
+interface IInputProps extends Omit<InputProps, 'onInput' | 'value'> {
   id: string;
   name: string;
   type: string;
-  onInput: (id: string, value: string, isValid: boolean) => void;
-  validators: Validator[];
+  value: InputValue;
+  isValid?: boolean;
+  isTouched?: boolean;
   label?: string;
-  initialValue?: string;
-  initialValid?: boolean;
+  errorMessage?: string;
   inputLeftElement?: React.ReactNode;
   inputLeftElementOnClick?: () => void;
   inputRightElement?: React.ReactNode;
   inputRightElementOnClick?: () => void;
-  errorMessage?: string;
 }
 
 const Input: React.FC<IInputProps> = ({
-  initialValue,
-  initialValid,
-  validators,
+  value,
+  label,
   inputLeftElement,
   inputLeftElementOnClick,
   inputRightElement,
   inputRightElementOnClick,
-  label,
-  onInput,
   errorMessage,
   ...props
 }) => {
-  const { inputState, dispatch } = useFormInput(initialValue, initialValid);
-
   const labelColor = useColorModeValue('gray.700', 'gray.50');
 
-  const { id } = props;
-  const { value, isValid } = inputState;
-
-  useEffect(() => {
-    onInput(id, value, isValid);
-  }, [id, isValid, onInput, value]);
-
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: 'CHANGE',
-      val: event.target.value,
-      validators,
-    });
-  };
-
-  const touchHandler = () => {
-    dispatch({
-      type: 'TOUCH',
-    });
-  };
-
   return (
-    <FormControl isInvalid={!inputState.isValid && inputState.isTouched}>
+    <FormControl isInvalid={!value.isValid && value.isTouched}>
       {label && (
         <FormLabel
           htmlFor={props.id}
@@ -95,9 +67,7 @@ const Input: React.FC<IInputProps> = ({
           size='sm'
           w='full'
           rounded='md'
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputState.value}
+          value={value.value}
           {...props}
         />
         {inputRightElement && (

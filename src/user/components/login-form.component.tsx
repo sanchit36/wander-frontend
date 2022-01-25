@@ -29,15 +29,19 @@ const LoginForm = () => {
   const auth = useContext(AuthContext);
   const { colorMode } = useColorMode();
 
-  const { formState, inputHandler } = useForm(
+  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
     {
       email: {
         value: '',
         isValid: false,
+        validators: [VALIDATOR_REQUIRE('email is required'), VALIDATOR_EMAIL()],
       },
       password: {
         value: '',
         isValid: false,
+        validators: [
+          VALIDATOR_MINLENGTH(6, 'password should be at least 6 characters'),
+        ],
       },
     },
     false
@@ -92,10 +96,11 @@ const LoginForm = () => {
             id='email'
             name='email'
             type='email'
-            onInput={inputHandler}
             autoComplete='email'
-            validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
-            errorMessage='email is required'
+            value={formState.inputs.email}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.email}
           />
 
           <Input
@@ -103,16 +108,17 @@ const LoginForm = () => {
             id='password'
             name='password'
             type={showPassword ? 'text' : 'password'}
-            onInput={inputHandler}
             autoComplete='none'
-            validators={[VALIDATOR_MINLENGTH(6)]}
             inputRightElement={
               showPassword ? <AiFillEyeInvisible /> : <AiFillEye />
             }
             inputRightElementOnClick={() => {
               setShowPassword((p) => !p);
             }}
-            errorMessage='password should be at least 6 characters'
+            value={formState.inputs.password}
+            onChange={inputChangeHandler}
+            onBlur={inputBlurHandler}
+            errorMessage={formState.errors.password}
           />
           <Text color='gray' textAlign='right'>
             <RouterLink to='/reset-password'>Forgot Password?</RouterLink>
@@ -124,7 +130,7 @@ const LoginForm = () => {
             colorScheme='purple'
             variant='solid'
             fontWeight='md'
-            disabled={!formState.isValid}
+            disabled={!formState.isFormValid}
           >
             Login
           </Button>
