@@ -54,6 +54,7 @@ const PostForm = () => {
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formState);
     if (!formState.isFormValid) {
       return toast.error('Please enter a the description.', {
         theme: colorMode,

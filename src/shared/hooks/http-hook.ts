@@ -14,31 +14,19 @@ const baseHeaders: AxiosRequestConfig['headers'] = {
   'Content-Type': 'application/json',
 };
 
-const ax = axios.create({
+const instance = axios.create({
   baseURL: 'http://localhost:5000/api',
   headers: baseHeaders,
   withCredentials: true,
 });
 
 export const useHttpClient = () => {
-  const { token } = useContext(AuthContext);
+  const { token, login } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const activeHttpRequests = useRef<AbortController[]>([]);
-
-  useEffect(() => {
-    const reqInterceptor = ax.interceptors.request.use((config) => {
-      if (token) {
-        config.headers!['Authorization'] = `Bearer ${token}`;
-      }
-      return config;
-    });
-    return () => {
-      ax.interceptors.request.eject(reqInterceptor);
-    };
-  }, [token]);
 
   const sendRequest = useCallback(
     async (
@@ -52,7 +40,7 @@ export const useHttpClient = () => {
       activeHttpRequests.current.push(httpAbortCtrl);
 
       try {
-        const response = await ax(uri, {
+        const response = await instance(uri, {
           method,
           data,
           headers,
@@ -79,6 +67,46 @@ export const useHttpClient = () => {
     },
     []
   );
+
+  useEffect(() => {
+    const reqInterceptor = instance.interceptors.request.use(
+      (config: AxiosRequestConfig & { _retry?: boolean }) => {
+        if (token && !config._retry) {
+          config.headers!['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+      }
+    );
+
+    const resInterceptor = instance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (
+          error.response.status === 403 &&
+          error.response.data.message === 'jwt expired' &&
+          !originalRequest._retry
+        ) {
+          originalRequest._retry = true;
+          const data = await sendRequest('/users/refresh-token');
+          login(data.payload.user!, data.payload.accessToken!);
+          originalRequest.headers['Authorization'] =
+            'Bearer ' + data.payload.accessToken;
+          return instance(originalRequest);
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      instance.interceptors.request.eject(reqInterceptor);
+      instance.interceptors.response.eject(resInterceptor);
+    };
+  }, [login, sendRequest, token]);
 
   const clearError = useCallback(() => {
     setError(null);

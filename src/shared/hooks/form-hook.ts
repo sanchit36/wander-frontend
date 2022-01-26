@@ -136,8 +136,9 @@ const formReducer: reducer = (state, action) => {
     case 'RESET': {
       const { payload } = action;
       return {
-        ...state,
         inputs: payload.inputs,
+        errors: {},
+        isFormValid: false,
       };
     }
 
