@@ -2,14 +2,15 @@ import { ColorModeScript } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { AuthProvider } from './shared/context/auth.context';
+import { Provider } from 'react-redux';
+import store from './shared/state/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
+    <Provider store={store}>
       <ColorModeScript />
       <App />
-    </AuthProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

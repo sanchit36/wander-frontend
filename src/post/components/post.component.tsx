@@ -25,7 +25,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       shadow='md'
       bg={useColorModeValue('white', 'gray.800')}
       border={`1px solid ${useColorModeValue('grey', '#444')}`}
-      my='5'
+      mb='5'
     >
       <chakra.header
         px={4}

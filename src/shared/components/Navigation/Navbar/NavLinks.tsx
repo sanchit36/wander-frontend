@@ -1,17 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { AiFillHome } from 'react-icons/ai';
 import { FaHashtag, FaUserAlt } from 'react-icons/fa';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { AuthContext } from '../../../context/auth.context';
+import { BsPlusSquareFill } from 'react-icons/bs';
 
 import NavLink from './NavLink';
+import useAuth from '../../../hooks/useAuth';
 
 const NavLinks = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn } = useAuth();
 
   return isLoggedIn ? (
     <React.Fragment>
       <NavLink to='/home' icon={<AiFillHome />} text='Home' />
+      <NavLink
+        to='/create-post'
+        icon={<BsPlusSquareFill />}
+        text='Create Post'
+      />
       <NavLink to='/explore' icon={<FaHashtag />} text='Explore' />
     </React.Fragment>
   ) : (

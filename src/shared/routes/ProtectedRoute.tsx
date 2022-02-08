@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/auth.context';
+import useAuth from '../hooks/useAuth';
 
 const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn } = useAuth();
   return !isLoggedIn ? children : <Navigate to='/' />;
 };
 

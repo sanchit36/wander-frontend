@@ -7,6 +7,7 @@ import {
   HStack,
   useDisclosure,
   Heading,
+  Container,
 } from '@chakra-ui/react';
 
 import MobileNavbar from './MobileNavbar';
@@ -21,44 +22,40 @@ const Navbar = () => {
 
   return (
     <React.Fragment>
-      <chakra.header
-        bg={bg}
-        w='full'
-        h='8vh'
-        px={{ base: 2, sm: 4 }}
-        shadow='md'
-      >
-        <Flex
-          alignItems='center'
-          justifyContent='space-between'
-          mx='auto'
-          h='100%'
-        >
-          <HStack display='flex' spacing={5} alignItems='center'>
-            <Heading as='h3' fontSize='xl' title='Wander Home Page'>
-              <Link to='/'>Wander</Link>
-            </Heading>
-            <NavSearch />
-            {/* Mobile Navbar */}
-            <MobileNavbar mobileNav={mobileNav} bg={bg} />
-          </HStack>
-
-          <HStack display='flex' spacing={5} alignItems='center'>
-            {/* Desktop Navbar */}
-            <HStack spacing={3} display={{ base: 'none', md: 'inline-flex' }}>
-              <NavLinks />
+      <chakra.header bg={bg} h='8vh' px={{ base: 2, sm: 4 }} shadow='md'>
+        <Container maxW='container.xl' h='8vh'>
+          <Flex
+            alignItems='center'
+            justifyContent='space-between'
+            mx='auto'
+            h='100%'
+          >
+            <HStack display='flex' spacing={5} alignItems='center'>
+              <Heading as='h3' fontSize='xl' title='Wander Home Page'>
+                <Link to='/'>Wanderers</Link>
+              </Heading>
+              <NavSearch />
+              {/* Mobile Navbar */}
+              <MobileNavbar mobileNav={mobileNav} bg={bg} />
             </HStack>
 
-            {/* Nav Right */}
-            <HStack
-              spacing={3}
-              display={mobileNav.isOpen ? 'none' : 'flex'}
-              alignItems='center'
-            >
-              <NavIcons />
+            <HStack display='flex' alignItems='center'>
+              {/* Desktop Navbar */}
+              <HStack spacing={3} display={{ base: 'none', md: 'inline-flex' }}>
+                <NavLinks />
+              </HStack>
+
+              {/* Nav Right */}
+              <HStack
+                spacing={3}
+                display={mobileNav.isOpen ? 'none' : 'flex'}
+                alignItems='center'
+              >
+                <NavIcons />
+              </HStack>
             </HStack>
-          </HStack>
-        </Flex>
+          </Flex>
+        </Container>
       </chakra.header>
     </React.Fragment>
   );

@@ -9,24 +9,25 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 import { Input } from '../../shared/components';
-import { AuthContext } from '../../shared/context/auth.context';
 import useForm from '../../shared/hooks/form-hook';
 import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
+import useAuth from '../../shared/hooks/useAuth';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
-import { User } from '../user.interface';
 
 const LoginForm = () => {
-  const auth = useContext(AuthContext);
+  const { loginUser } = useAuth();
+  const dispatch = useDispatch();
   const { colorMode } = useColorMode();
 
   const { formState, inputChangeHandler, inputBlurHandler } = useForm(
@@ -59,7 +60,12 @@ const LoginForm = () => {
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
       });
-      auth.login(data.payload.user as User, data.payload.accessToken as string);
+      dispatch(
+        loginUser({
+          user: data.payload.user!,
+          token: data.payload.accessToken!,
+        })
+      );
     } catch (error: any) {}
   };
 

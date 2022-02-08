@@ -1,5 +1,5 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -8,25 +8,32 @@ import {
 } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
 
 import { Navbar } from './shared/components';
-import { AuthContext } from './shared/context/auth.context';
 import { useHttpClient } from './shared/hooks/http-hook';
+import useAuth from './shared/hooks/useAuth';
 import routes from './shared/routes';
 import PrivateRoute from './shared/routes/PrivateRoute';
 import ProtectedRoute from './shared/routes/ProtectedRoute';
 
 const App = () => {
-  const { isLoggedIn, login } = useContext(AuthContext);
+  const { isLoggedIn, loginUser } = useAuth();
   const { sendRequest } = useHttpClient();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await sendRequest('/users/refresh-token');
-      login(data.payload.user!, data.payload.accessToken!);
+      dispatch(
+        loginUser({
+          user: data.payload.user!,
+          token: data.payload.accessToken!,
+        })
+      );
     };
     fetchData();
-  }, [sendRequest, login]);
+  }, [sendRequest, loginUser, dispatch]);
 
   return (
     <Router>

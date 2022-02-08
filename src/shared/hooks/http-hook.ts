@@ -1,6 +1,8 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import axios, { AxiosRequestConfig } from 'axios';
-import { AuthContext } from '../context/auth.context';
+import { useDispatch } from 'react-redux';
+
+import useAuth from './useAuth';
 
 export enum Methods {
   'GET' = 'GET',
@@ -21,7 +23,8 @@ const instance = axios.create({
 });
 
 export const useHttpClient = () => {
-  const { token, login } = useContext(AuthContext);
+  const { token, loginUser } = useAuth();
+  const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +95,12 @@ export const useHttpClient = () => {
         ) {
           originalRequest._retry = true;
           const data = await sendRequest('/users/refresh-token');
-          login(data.payload.user!, data.payload.accessToken!);
+          dispatch(
+            loginUser({
+              user: data.payload.user!,
+              token: data.payload.accessToken!,
+            })
+          );
           originalRequest.headers['Authorization'] =
             'Bearer ' + data.payload.accessToken;
           return instance(originalRequest);
@@ -106,7 +114,7 @@ export const useHttpClient = () => {
       instance.interceptors.request.eject(reqInterceptor);
       instance.interceptors.response.eject(resInterceptor);
     };
-  }, [login, sendRequest, token]);
+  }, [dispatch, loginUser, sendRequest, token]);
 
   const clearError = useCallback(() => {
     setError(null);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 
 interface NavLinkProps {
@@ -12,16 +12,15 @@ const NavLink: React.FC<NavLinkProps> = ({ to, icon, text }) => {
   const { pathname } = useLocation();
 
   return (
-    <Button
+    <IconButton
       as={Link}
       to={to}
       w='full'
       variant={pathname === to ? 'solid' : 'ghost'}
       colorScheme={pathname === to ? 'purple' : 'inherit'}
-      leftIcon={icon}
-    >
-      {text}
-    </Button>
+      icon={icon}
+      aria-label={text}
+    />
   );
 };
 
