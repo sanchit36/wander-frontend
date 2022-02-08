@@ -30,7 +30,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const { colorMode } = useColorMode();
 
-  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
+  const { formState, inputHandler, inputBlurHandler } = useForm(
     {
       email: {
         value: '',
@@ -104,7 +104,7 @@ const LoginForm = () => {
             type='email'
             autoComplete='email'
             value={formState.inputs.email}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.email}
           />
@@ -122,7 +122,7 @@ const LoginForm = () => {
               setShowPassword((p) => !p);
             }}
             value={formState.inputs.password}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.password}
           />

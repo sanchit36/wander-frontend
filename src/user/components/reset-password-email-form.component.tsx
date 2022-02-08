@@ -20,7 +20,7 @@ import {
 } from '../../shared/utils/validators';
 
 const ResetPasswordEmailFrom = () => {
-  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
+  const { formState, inputHandler, inputBlurHandler } = useForm(
     {
       email: {
         value: '',
@@ -82,7 +82,7 @@ const ResetPasswordEmailFrom = () => {
               type='email'
               autoComplete='email'
               value={formState.inputs.email}
-              onChange={inputChangeHandler}
+              onInput={inputHandler}
               onBlur={inputBlurHandler}
               errorMessage={formState.errors.email}
             />

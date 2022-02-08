@@ -1,16 +1,27 @@
-import { Box, BoxProps, FormControl } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  chakra,
+  FormControl,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import useImageUpload from '../../hooks/image-hook';
 
 interface Props extends Omit<BoxProps, 'onInput'> {
   id: string;
-  onInput: (id: string, value: File | undefined) => void;
-  initialValue: File | null;
+  onInput: (id: string, value: File | undefined, isValid: boolean) => void;
+  value: any;
   errorMessage?: string;
-  reset?: boolean;
 }
 
-const ImageUpload: React.FC<Props> = (props) => {
+const ImageUpload: React.FC<Props> = ({
+  id,
+  onInput,
+  value,
+  errorMessage,
+  ...props
+}) => {
   const {
     filePickerRef,
     isValid,
@@ -18,38 +29,57 @@ const ImageUpload: React.FC<Props> = (props) => {
     pickImageHandler,
     pickChangeHandler,
     setFile,
-  } = useImageUpload(props.id, props.onInput, props.initialValue);
-  const { reset } = props;
+  } = useImageUpload(id, onInput, value);
 
   useEffect(() => {
-    if (reset) setFile(null);
-  }, [reset, setFile]);
+    if (!value.value) setFile(null);
+  }, [value, setFile]);
 
   return (
-    <FormControl>
-      <input
-        id={props.id}
+    <FormControl w='100%' h='100%' {...props}>
+      <chakra.input
+        id={id}
         ref={filePickerRef}
-        style={{ display: 'none' }}
+        display='none'
         type='file'
         accept='.jpg,.png,.jpeg'
         onChange={pickChangeHandler}
       />
-      <Box textAlign='center' cursor='pointer'>
+      <Box
+        textAlign='center'
+        cursor='pointer'
+        w='100%'
+        h='100%'
+        display='flex'
+        flexDirection='column'
+      >
         <Box
+          width='100%'
+          flex='1'
+          rounded='lg'
           m='auto'
-          border='1px solid #eee'
-          w='200px'
-          h='200px'
+          border={`1px solid ${useColorModeValue(
+            'var(--chakra-colors-gray-200)',
+            'var(--chakra-colors-whiteAlpha-300)'
+          )}`}
+          overflow='hidden'
           d='flex'
           alignItems='center'
           justifyContent='center'
           onClick={pickImageHandler}
         >
-          {previewUrl && <img src={previewUrl} alt='Preview' />}
+          {previewUrl && (
+            <chakra.img
+              src={previewUrl}
+              alt='Preview'
+              width='100%'
+              height='100%'
+              objectFit='cover'
+            />
+          )}
           {!previewUrl && <p>Please pick an image.</p>}
         </Box>
-        {!isValid && <p>{props.errorMessage}</p>}
+        {!isValid && <chakra.p color='red.400'>{errorMessage}</chakra.p>}
       </Box>
     </FormControl>
   );

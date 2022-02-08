@@ -1,4 +1,5 @@
 import { ExplorePage, HomePage } from '../../post/pages';
+import CreatePost from '../../post/pages/create-post.page';
 import {
   LoginPage,
   SignUpPage,
@@ -47,13 +48,18 @@ const routes: Route[] = [
   },
   {
     path: '/home',
-    type: 'public',
+    type: 'private',
     Element: HomePage,
   },
   {
     path: '/explore',
-    type: 'public',
+    type: 'private',
     Element: ExplorePage,
+  },
+  {
+    path: '/create-post',
+    type: 'private',
+    Element: CreatePost,
   },
 ];
 

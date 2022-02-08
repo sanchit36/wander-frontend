@@ -25,7 +25,7 @@ import { toast } from 'react-toastify';
 const SignUpForm = () => {
   const { colorMode } = useColorMode();
 
-  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
+  const { formState, inputHandler, inputBlurHandler } = useForm(
     {
       username: {
         value: '',
@@ -107,7 +107,7 @@ const SignUpForm = () => {
             type='text'
             autoComplete='username'
             value={formState.inputs.username}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.username}
           />
@@ -119,7 +119,7 @@ const SignUpForm = () => {
             type='email'
             autoComplete='email'
             value={formState.inputs.email}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.email}
           />
@@ -137,7 +137,7 @@ const SignUpForm = () => {
               setShowPassword((p) => !p);
             }}
             value={formState.inputs.password}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.password}
           />
@@ -155,7 +155,7 @@ const SignUpForm = () => {
               setShowPasswordConfirmation((p) => !p);
             }}
             value={formState.inputs.passwordConfirmation}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.passwordConfirmation}
           />

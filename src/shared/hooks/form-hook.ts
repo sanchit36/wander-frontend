@@ -22,6 +22,7 @@ type Action =
       payload: {
         id: string;
         value: any;
+        isValid: boolean;
       };
     }
   | { type: 'VALIDATE' }
@@ -36,7 +37,7 @@ const formReducer: reducer = (state, action) => {
       const { payload } = action;
       let formIsValid = true;
       const input = state.inputs[payload.id];
-      let isValid = true;
+      let isValid = payload.isValid;
       let error = '';
       if (input.validators) {
         const validators = validate(payload.value, input.validators);
@@ -157,25 +158,19 @@ const useForm = (
     isFormValid: isFormValid,
   });
 
-  const inputHandler = useCallback((id: string, value: any) => {
-    dispatch({
-      type: 'CHANGE',
-      payload: {
-        id,
-        value,
-      },
-    });
-  }, []);
-
-  const inputChangeHandler = useCallback((event: React.ChangeEvent) => {
-    dispatch({
-      type: 'CHANGE',
-      payload: {
-        id: event.target.id,
-        value: (event.target as HTMLInputElement).value,
-      },
-    });
-  }, []);
+  const inputHandler = useCallback(
+    (id: string, value: any, isValid: boolean) => {
+      dispatch({
+        type: 'CHANGE',
+        payload: {
+          id,
+          value,
+          isValid,
+        },
+      });
+    },
+    []
+  );
 
   const inputBlurHandler = useCallback((event: React.FocusEvent) => {
     dispatch({
@@ -204,7 +199,6 @@ const useForm = (
     formState,
     inputHandler,
     inputBlurHandler,
-    inputChangeHandler,
     validate: validateInputs,
     resetForm,
   };

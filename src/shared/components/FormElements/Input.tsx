@@ -25,6 +25,7 @@ interface IInputProps extends Omit<InputProps, 'onInput' | 'value'> {
   inputLeftElementOnClick?: () => void;
   inputRightElement?: React.ReactNode;
   inputRightElementOnClick?: () => void;
+  onInput: (id: string, value: any, isValid: boolean) => void;
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -35,6 +36,7 @@ const Input: React.FC<IInputProps> = ({
   inputRightElement,
   inputRightElementOnClick,
   errorMessage,
+  onInput,
   ...props
 }) => {
   const labelColor = useColorModeValue('gray.700', 'gray.50');
@@ -68,6 +70,9 @@ const Input: React.FC<IInputProps> = ({
           w='full'
           rounded='md'
           value={value.value}
+          onChange={(event) =>
+            onInput(event.target.id, event.target.value, value.isValid)
+          }
           {...props}
         />
         {inputRightElement && (

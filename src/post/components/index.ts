@@ -1,5 +1,5 @@
-import PostForm from './post-form.component';
+import CreatePostForm from './post-form.component';
 import Post from './post.component';
 import PostList from './post-list.component';
 
-export { PostForm, Post, PostList };
+export { CreatePostForm, Post, PostList };

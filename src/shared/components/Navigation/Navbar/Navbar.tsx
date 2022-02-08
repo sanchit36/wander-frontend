@@ -17,12 +17,20 @@ import NavIcons from './NavIcons';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const bg = useColorModeValue('white', 'gray.800');
+  const bg = useColorModeValue('white', 'var(--chakra-colors-gray-800)');
   const mobileNav = useDisclosure();
 
   return (
     <React.Fragment>
-      <chakra.header bg={bg} h='8vh' px={{ base: 2, sm: 4 }} shadow='md'>
+      <chakra.header
+        bg={bg}
+        h='8vh'
+        px={{ base: 2, sm: 4 }}
+        shadow='md'
+        position='sticky'
+        top='0'
+        zIndex={'2'}
+      >
         <Container maxW='container.xl' h='8vh'>
           <Flex
             alignItems='center'
@@ -39,7 +47,7 @@ const Navbar = () => {
               <MobileNavbar mobileNav={mobileNav} bg={bg} />
             </HStack>
 
-            <HStack display='flex' alignItems='center'>
+            <HStack display='flex' alignItems='center' spacing={3}>
               {/* Desktop Navbar */}
               <HStack spacing={3} display={{ base: 'none', md: 'inline-flex' }}>
                 <NavLinks />

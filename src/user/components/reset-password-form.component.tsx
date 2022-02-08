@@ -10,7 +10,7 @@ import { VALIDATOR_MINLENGTH } from '../../shared/utils/validators';
 const ResetPasswordForm = () => {
   const { userId, token } = useParams();
 
-  const { formState, inputChangeHandler, inputBlurHandler } = useForm(
+  const { formState, inputHandler, inputBlurHandler } = useForm(
     {
       password: {
         value: '',
@@ -68,7 +68,7 @@ const ResetPasswordForm = () => {
             type='password'
             autoComplete='password'
             value={formState.inputs.password}
-            onChange={inputChangeHandler}
+            onInput={inputHandler}
             onBlur={inputBlurHandler}
             errorMessage={formState.errors.username}
           />

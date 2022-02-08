@@ -20,7 +20,7 @@ interface MobileNavbarProps {
     getButtonProps: (props?: any) => any;
     getDisclosureProps: (props?: any) => any;
   };
-  bg: 'white' | 'gray.800';
+  bg: string;
 }
 
 const MobileNavbar: React.FC<MobileNavbarProps> = ({ mobileNav, bg }) => {

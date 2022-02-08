@@ -2,25 +2,28 @@ import React, { useRef, useState, useEffect } from 'react';
 
 const useImageUpload = (
   id: string,
-  onInput: (id: string, value: File | undefined) => void,
-  initialValue: File | null
+  onInput: (id: string, value: File | undefined, isValid: boolean) => void,
+  value: any
 ) => {
-  const [file, setFile] = useState<File | null>(initialValue);
+  const [file, setFile] = useState<File | null>(value.value);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(value.isValid);
   const filePickerRef = useRef<HTMLInputElement>(null);
 
   const pickChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pickedFile;
+    let isValid = true;
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
       setFile(pickedFile);
       setIsValid(true);
+      isValid = true;
     } else {
       setFile(null);
       setIsValid(false);
+      isValid = false;
     }
-    onInput(id, pickedFile);
+    onInput(id, pickedFile, isValid);
   };
 
   const pickImageHandler = () => {
