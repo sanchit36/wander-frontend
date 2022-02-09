@@ -11,14 +11,14 @@ import {
 import { FiMoreVertical } from 'react-icons/fi';
 import { FaBookmark, FaHeart, FaShare } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
-import IPost from '../post.interface';
+import Post from '../post.interface';
 import Avatar from '../../shared/components/UIElements/Avatar';
 
 interface PostProps {
-  post: IPost;
+  post: Post;
 }
 
-const Post: React.FC<PostProps> = ({ post }) => {
+const SinglePost: React.FC<PostProps> = ({ post }) => {
   return (
     <chakra.article
       rounded='lg'
@@ -109,4 +109,4 @@ const Post: React.FC<PostProps> = ({ post }) => {
   );
 };
 
-export default Post;
+export default SinglePost;

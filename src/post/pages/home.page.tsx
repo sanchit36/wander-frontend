@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import MainLayout from '../../shared/layout/main.layout';
 import { PostList } from '../components';
-import IPost from '../post.interface';
+import Post from '../post.interface';
 
 const HomePage = () => {
   const { sendRequest } = useHttpClient();
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

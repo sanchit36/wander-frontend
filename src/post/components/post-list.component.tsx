@@ -1,19 +1,22 @@
-import { chakra } from '@chakra-ui/react';
 import React from 'react';
-import Post from './post.component';
-import IPost from '../post.interface';
+import SinglePost from './single-post.component';
+import Post from '../post.interface';
+import { Grid, GridItem } from '@chakra-ui/react';
 
 interface PostListProps {
-  posts: IPost[] | null;
+  posts: Post[] | null;
+  cols?: number;
 }
 
-const PostList: React.FC<PostListProps> = ({ posts }) => {
+const PostList: React.FC<PostListProps> = ({ posts, cols }) => {
   return posts ? (
-    <chakra.div>
+    <Grid templateColumns={`repeat(${cols || 1}, minmax(250px, 1fr))`} gap={6}>
       {posts.map((post) => (
-        <Post key={post._id} post={post} />
+        <GridItem key={post._id}>
+          <SinglePost post={post} />
+        </GridItem>
       ))}
-    </chakra.div>
+    </Grid>
   ) : null;
 };
 

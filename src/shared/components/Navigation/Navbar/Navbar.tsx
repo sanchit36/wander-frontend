@@ -12,7 +12,6 @@ import {
 
 import MobileNavbar from './MobileNavbar';
 import NavLinks from './NavLinks';
-import NavSearch from './NavSearch';
 import NavIcons from './NavIcons';
 import { Link } from 'react-router-dom';
 
@@ -29,7 +28,7 @@ const Navbar = () => {
         shadow='md'
         position='sticky'
         top='0'
-        zIndex={'2'}
+        zIndex={'50'}
       >
         <Container maxW='container.xl' h='8vh'>
           <Flex
@@ -42,7 +41,6 @@ const Navbar = () => {
               <Heading as='h3' fontSize='xl' title='Wander Home Page'>
                 <Link to='/'>Wanderers</Link>
               </Heading>
-              <NavSearch />
               {/* Mobile Navbar */}
               <MobileNavbar mobileNav={mobileNav} bg={bg} />
             </HStack>

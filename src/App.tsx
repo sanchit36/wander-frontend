@@ -1,4 +1,3 @@
-import { ChakraProvider, theme } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -11,71 +10,62 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 
 import { Navbar } from './shared/components';
-import { useHttpClient } from './shared/hooks/http-hook';
-import useAuth from './shared/hooks/useAuth';
 import routes from './shared/routes';
 import PrivateRoute from './shared/routes/PrivateRoute';
 import ProtectedRoute from './shared/routes/ProtectedRoute';
+import { refreshUser } from './shared/state/user/user.action-creators';
+import Spinner from './shared/components/UIElements/Spinner';
+import useAuth from './shared/hooks/useAuth';
 
 const App = () => {
-  const { isLoggedIn, loginUser } = useAuth();
-  const { sendRequest } = useHttpClient();
+  const { isLoggedIn, isRefreshing } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await sendRequest('/users/refresh-token');
-      dispatch(
-        loginUser({
-          user: data.payload.user!,
-          token: data.payload.accessToken!,
-        })
-      );
-    };
-    fetchData();
-  }, [sendRequest, loginUser, dispatch]);
+    dispatch(refreshUser());
+  }, [dispatch]);
 
-  return (
+  return isRefreshing ? (
+    <Spinner />
+  ) : (
     <Router>
-      <ChakraProvider theme={theme}>
-        <ToastContainer
-          position='top-right'
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <Navbar />
-        <Routes>
-          {routes.map(({ type, path, Element }) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                type === 'private' ? (
-                  <PrivateRoute>
-                    <Element />
-                  </PrivateRoute>
-                ) : type === 'protected' ? (
-                  <ProtectedRoute>
-                    <Element />
-                  </ProtectedRoute>
-                ) : (
-                  <Element />
-                )
-              }
-            />
-          ))}
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Navbar />
+      <Routes>
+        {routes.map(({ type, path, Element }) => (
           <Route
-            path='/'
-            element={<Navigate replace to={isLoggedIn ? '/home' : '/login'} />}
+            key={path}
+            path={path}
+            element={
+              type === 'private' ? (
+                <PrivateRoute>
+                  <Element />
+                </PrivateRoute>
+              ) : type === 'protected' ? (
+                <ProtectedRoute>
+                  <Element />
+                </ProtectedRoute>
+              ) : (
+                <Element />
+              )
+            }
           />
-        </Routes>
-      </ChakraProvider>
+        ))}
+        <Route
+          path='/'
+          element={<Navigate replace to={isLoggedIn ? '/home' : '/login'} />}
+        />
+      </Routes>
     </Router>
   );
 };

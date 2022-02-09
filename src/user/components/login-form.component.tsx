@@ -17,16 +17,16 @@ import { useDispatch } from 'react-redux';
 
 import { Input } from '../../shared/components';
 import useForm from '../../shared/hooks/form-hook';
-import { Methods, useHttpClient } from '../../shared/hooks/http-hook';
 import useAuth from '../../shared/hooks/useAuth';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from '../../shared/utils/validators';
+import { clearError } from '../../shared/state/user/user.action-creators';
 
 const LoginForm = () => {
-  const { loginUser } = useAuth();
+  const { isLoading, error, loginUser } = useAuth();
   const dispatch = useDispatch();
   const { colorMode } = useColorMode();
 
@@ -48,37 +48,27 @@ const LoginForm = () => {
     false
   );
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
   const [showPassword, setShowPassword] = useState(false);
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    clearError();
-    try {
-      const data = await sendRequest('/users/login', Methods.POST, {
-        email: formState.inputs.email.value,
-        password: formState.inputs.password.value,
-      });
-      dispatch(
-        loginUser({
-          user: data.payload.user!,
-          token: data.payload.accessToken!,
-        })
-      );
-    } catch (error: any) {}
+    const userCredentials = {
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+    };
+    dispatch(loginUser(userCredentials));
   };
 
   useEffect(() => {
     if (error) {
-      toast.error(error, {
+      toast.error(error.message, {
         theme: colorMode,
       });
     }
     return () => {
-      clearError();
+      dispatch(clearError());
     };
-  }, [error, colorMode, clearError]);
+  }, [colorMode, dispatch, error]);
 
   return (
     <Stack

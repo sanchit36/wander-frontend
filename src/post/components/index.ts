@@ -1,5 +1,6 @@
 import CreatePostForm from './post-form.component';
-import Post from './post.component';
+import SinglePost from './single-post.component';
 import PostList from './post-list.component';
+import Search from './search.component';
 
-export { CreatePostForm, Post, PostList };
+export { CreatePostForm, SinglePost, PostList, Search };

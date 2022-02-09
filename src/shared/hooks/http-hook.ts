@@ -23,9 +23,9 @@ const instance = axios.create({
 });
 
 export const useHttpClient = () => {
-  const { token, loginUser } = useAuth();
+  const { loginUser } = useAuth();
   const dispatch = useDispatch();
-
+  const token = null;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -95,12 +95,7 @@ export const useHttpClient = () => {
         ) {
           originalRequest._retry = true;
           const data = await sendRequest('/users/refresh-token');
-          dispatch(
-            loginUser({
-              user: data.payload.user!,
-              token: data.payload.accessToken!,
-            })
-          );
+          dispatch(loginUser({ email: '', password: '' }));
           originalRequest.headers['Authorization'] =
             'Bearer ' + data.payload.accessToken;
           return instance(originalRequest);

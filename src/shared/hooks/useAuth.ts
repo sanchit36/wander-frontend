@@ -2,9 +2,19 @@ import { useAppSelector } from '../state/hooks';
 import { loginUser, logoutUser } from '../state/user/user.action-creators';
 
 const useAuth = () => {
-  const { token, user } = useAppSelector((state) => state.user);
+  const { user, error, isLoading, isRefreshing } = useAppSelector(
+    ({ user }) => user
+  );
 
-  return { isLoggedIn: !!token, token, user, loginUser, logoutUser };
+  return {
+    isLoggedIn: !!user,
+    user,
+    error,
+    isLoading,
+    isRefreshing,
+    loginUser,
+    logoutUser,
+  };
 };
 
 export default useAuth;
