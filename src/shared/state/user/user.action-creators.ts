@@ -70,9 +70,14 @@ export const clearError = () => {
 };
 
 export const logoutUser = () => {
-  return (dispatch: AppDispatch) => {
-    dispatch({
-      type: ActionType.LOGOUT_USER,
-    });
+  return async (dispatch: AppDispatch) => {
+    try {
+      await api.post('/users/logout');
+      // Removing the token to localStorage
+      localStorage.removeItem('xid');
+      dispatch({
+        type: ActionType.LOGOUT_USER,
+      });
+    } catch (error) {}
   };
 };

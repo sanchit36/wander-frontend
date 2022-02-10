@@ -30,7 +30,7 @@ const Navbar = () => {
         top='0'
         zIndex={'50'}
       >
-        <Container maxW='container.xl' h='8vh'>
+        <Container maxW={{ md: 'container.md', lg: 'container.lg' }} h='8vh'>
           <Flex
             alignItems='center'
             justifyContent='space-between'

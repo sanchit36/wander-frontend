@@ -141,6 +141,8 @@ const PostForm = () => {
                 formState.inputs.description.isValid
               )
             }
+            resize='none'
+            rows={10}
           />
           <Input
             id='address'

@@ -6,19 +6,30 @@ import {
   useColorModeValue,
   Link,
   IconButton,
-  HStack,
+  Box,
+  Input,
+  Divider,
+  Button,
 } from '@chakra-ui/react';
-import { FiMoreVertical } from 'react-icons/fi';
-import { FaBookmark, FaHeart, FaShare } from 'react-icons/fa';
-import { BiComment } from 'react-icons/bi';
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiOutlineComment,
+  AiOutlineMore,
+  AiOutlineShareAlt,
+} from 'react-icons/ai';
+import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import Post from '../post.interface';
 import Avatar from '../../shared/components/UIElements/Avatar';
+import useAuth from '../../shared/hooks/useAuth';
 
 interface PostProps {
   post: Post;
 }
 
 const SinglePost: React.FC<PostProps> = ({ post }) => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <chakra.article
       rounded='lg'
@@ -50,61 +61,99 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
         </Flex>
         <IconButton
           variant='ghost'
-          icon={<FiMoreVertical />}
+          fontSize='22'
+          icon={<AiOutlineMore />}
           aria-label='settings'
         />
       </chakra.header>
 
-      {post.image && (
-        <Image w='full' h='400px' fit='cover' src={post.image} alt='Article' />
-      )}
-
-      <chakra.main p={4}>
-        <chakra.p
-          fontSize='sm'
-          color={useColorModeValue('gray.600', 'gray.400')}
-        >
-          {post.description.substring(0, 120)}...
-        </chakra.p>
+      <chakra.main>
+        {post.image && (
+          <Image
+            w='full'
+            h='400px'
+            fit='cover'
+            src={post.image}
+            alt='Article'
+          />
+        )}
+        <Box px={2} py={1}>
+          <Flex justifyContent='space-between'>
+            <Box>
+              <IconButton
+                variant='ghost'
+                fontSize='22'
+                icon={<AiOutlineHeart />}
+                aria-label='like'
+              />
+              <IconButton
+                variant='ghost'
+                fontSize='22'
+                icon={<AiOutlineComment />}
+                aria-label='comment'
+              />
+              <IconButton
+                variant='ghost'
+                fontSize='22'
+                icon={<AiOutlineShareAlt />}
+                aria-label='share'
+              />
+            </Box>
+            <Box>
+              <IconButton
+                variant='ghost'
+                fontSize='22'
+                icon={<RiBookmarkLine />}
+                aria-label='save'
+                justifySelf={'flex-end'}
+              />
+            </Box>
+          </Flex>
+          <Box mx='2'>
+            <chakra.p
+              fontWeight='bold'
+              fontSize='sm'
+              mb='1'
+              color={useColorModeValue('gray.600', 'gray.400')}
+            >
+              100 Likes
+            </chakra.p>
+            <chakra.p
+              fontSize='sm'
+              mb='1'
+              color={useColorModeValue('gray.600', 'gray.400')}
+            >
+              <Link
+                mr='3'
+                fontWeight='bold'
+                color={useColorModeValue('gray.700', 'gray.200')}
+              >
+                {post.creator.username}
+              </Link>
+              {post.description.substring(0, 120)}...
+            </chakra.p>
+            <chakra.p
+              mb='3'
+              fontSize='sm'
+              color={useColorModeValue('gray.600', 'gray.400')}
+            >
+              see all 50 comments
+            </chakra.p>
+          </Box>
+        </Box>
       </chakra.main>
 
-      <chakra.footer
-        px={4}
-        py={1}
-        borderTop={`1px solid ${useColorModeValue('grey', '#444')}`}
-        display='flex'
-        alignItems='center'
-        justifyContent='space-between'
-      >
-        <HStack alignItems='center' spacing={2}>
-          <IconButton
-            variant='ghost'
-            fontSize='20'
-            icon={<FaHeart />}
-            aria-label='like'
-          />
-          <IconButton
-            variant='ghost'
-            fontSize='20'
-            icon={<BiComment />}
-            aria-label='comment'
-          />
-          <IconButton
-            variant='ghost'
-            fontSize='20'
-            icon={<FaShare />}
-            aria-label='share'
-          />
-        </HStack>
-        <Flex alignItems='center'>
-          <IconButton
-            variant='ghost'
-            fontSize='20'
-            icon={<FaBookmark />}
-            aria-label='save'
-          />
-        </Flex>
-      </chakra.footer>
+      {isLoggedIn && (
+        <chakra.footer>
+          <Divider />
+          <Flex p={3}>
+            <Input variant='unstyled' placeholder='Write a comment...' />
+            <Button size='sm' variant='ghost'>
+              Post
+            </Button>
+          </Flex>
+        </chakra.footer>
+      )}
     </chakra.article>
   );
 };
