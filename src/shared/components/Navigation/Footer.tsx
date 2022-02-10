@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <div>
+    <footer>
       <Link fontSize='11px' fontWeight='light' color='gray.300' mr='2'>
         About
       </Link>
@@ -24,7 +24,7 @@ const Footer = () => {
       <Text fontSize='12px' color='gray.300'>
         BUILD BY SANCHIT BAHDGAL
       </Text>
-    </div>
+    </footer>
   );
 };
 

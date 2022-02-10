@@ -1,6 +1,6 @@
 import api from '../../../api';
 import { AppDispatch } from '../store';
-import { ActionType } from './user.action-types';
+import { UserActionType } from './user.action-types';
 
 interface userCredentials {
   email: string;
@@ -10,7 +10,7 @@ interface userCredentials {
 export const loginUser = (userCredentials: userCredentials) => {
   return async (dispatch: AppDispatch) => {
     dispatch({
-      type: ActionType.LOGIN_START,
+      type: UserActionType.LOGIN_START,
     });
 
     try {
@@ -21,13 +21,13 @@ export const loginUser = (userCredentials: userCredentials) => {
       localStorage.setItem('xid', data.payload.accessToken);
 
       dispatch({
-        type: ActionType.LOGIN_USER,
+        type: UserActionType.LOGIN_USER,
         payload: { user: data.payload.user },
       });
     } catch (error: any) {
       let errorData = error && error.response && error.response.data;
       dispatch({
-        type: ActionType.LOGIN_FAILED,
+        type: UserActionType.LOGIN_FAILED,
         payload: { error: errorData },
       });
     }
@@ -37,7 +37,7 @@ export const loginUser = (userCredentials: userCredentials) => {
 export const refreshUser = () => {
   return async (dispatch: AppDispatch) => {
     dispatch({
-      type: ActionType.LOGIN_START,
+      type: UserActionType.LOGIN_START,
     });
 
     try {
@@ -48,13 +48,13 @@ export const refreshUser = () => {
       localStorage.setItem('xid', data.payload.accessToken);
 
       dispatch({
-        type: ActionType.LOGIN_USER,
+        type: UserActionType.LOGIN_USER,
         payload: { user: data.payload.user },
       });
     } catch (error: any) {
       let errorData = error && error.response && error.response.data;
       dispatch({
-        type: ActionType.LOGIN_FAILED,
+        type: UserActionType.LOGIN_FAILED,
         payload: { error: errorData },
       });
     }
@@ -64,7 +64,7 @@ export const refreshUser = () => {
 export const clearError = () => {
   return (dispatch: AppDispatch) => {
     dispatch({
-      type: ActionType.CLEAR_ERROR,
+      type: UserActionType.CLEAR_ERROR,
     });
   };
 };
@@ -76,7 +76,7 @@ export const logoutUser = () => {
       // Removing the token to localStorage
       localStorage.removeItem('xid');
       dispatch({
-        type: ActionType.LOGOUT_USER,
+        type: UserActionType.LOGOUT_USER,
       });
     } catch (error) {}
   };

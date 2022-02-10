@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import Spinner from '../../shared/components/UIElements/Spinner';
 import MainLayout from '../../shared/layout/main.layout';
+import { useAppSelector } from '../../shared/state/hooks';
+import { fetchPosts } from '../../shared/state/post/post.action-creators';
 import { PostList } from '../components';
-import Post from '../post.interface';
 
 const HomePage = () => {
-  const { sendRequest } = useHttpClient();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { isLoading, posts } = useAppSelector((state) => state.post);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await sendRequest('/posts');
-      setPosts(data.payload);
-    };
-    fetchData();
-  }, [sendRequest]);
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <MainLayout>
-      <PostList posts={posts} />
+      {!isLoading ? <PostList posts={posts} /> : <Spinner />}
     </MainLayout>
   );
 };

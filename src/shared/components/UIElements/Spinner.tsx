@@ -2,7 +2,7 @@ import { Flex, Spinner as ChakraSpinner } from '@chakra-ui/react';
 
 const Spinner = () => {
   return (
-    <Flex minH='100vh' justifyContent='center' alignItems='center'>
+    <Flex h='100%' w='100%' justifyContent='center' alignItems='center'>
       <ChakraSpinner size='xl' />
     </Flex>
   );

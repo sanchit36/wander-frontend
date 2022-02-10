@@ -1,5 +1,5 @@
 import { User } from '../../../user/user.interface';
-import { ActionType } from './user.action-types';
+import { UserActionType } from './user.action-types';
 
 export type UserState = {
   isRefreshing: boolean;
@@ -9,46 +9,46 @@ export type UserState = {
 };
 
 export interface LoginStart {
-  type: ActionType.LOGIN_START;
+  type: UserActionType.LOGIN_START;
 }
 
 export interface LoginUser {
-  type: ActionType.LOGIN_USER;
+  type: UserActionType.LOGIN_USER;
   payload: {
     user: User;
   };
 }
 
 export interface LoginFail {
-  type: ActionType.LOGIN_FAILED;
+  type: UserActionType.LOGIN_FAILED;
   payload: {
     error: any;
   };
 }
 
 export interface LogoutUser {
-  type: ActionType.LOGOUT_USER;
+  type: UserActionType.LOGOUT_USER;
 }
 
 export interface RefreshUserStart {
-  type: ActionType.REFRESH_USER_START;
+  type: UserActionType.REFRESH_USER_START;
 }
 
 export interface RefreshUser {
-  type: ActionType.REFRESH_USER;
+  type: UserActionType.REFRESH_USER;
   payload: {
     user: User;
   };
 }
 
 export interface RefreshUserFailed {
-  type: ActionType.REFRESH_USER_FAILED;
+  type: UserActionType.REFRESH_USER_FAILED;
   payload: {
     error: any;
   };
 }
 export interface ClearError {
-  type: ActionType.CLEAR_ERROR;
+  type: UserActionType.CLEAR_ERROR;
 }
 
 export type UserAction =

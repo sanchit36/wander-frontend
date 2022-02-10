@@ -1,4 +1,4 @@
-import { ActionType } from './user.action-types';
+import { UserActionType } from './user.action-types';
 import { UserAction, UserState } from './user.types';
 
 const initialState: UserState = {
@@ -8,56 +8,59 @@ const initialState: UserState = {
   user: null,
 };
 
-const userReducer = (state: UserState = initialState, action: UserAction) => {
+const userReducer = (
+  state: UserState = initialState,
+  action: UserAction
+): UserState => {
   switch (action.type) {
-    case ActionType.LOGIN_START:
+    case UserActionType.LOGIN_START:
       return {
         ...state,
         isLoading: true,
         error: null,
       };
-    case ActionType.LOGIN_USER:
+    case UserActionType.LOGIN_USER:
       return {
         ...state,
         isLoading: false,
         error: null,
         user: action.payload.user,
       };
-    case ActionType.LOGIN_FAILED:
+    case UserActionType.LOGIN_FAILED:
       return {
         ...state,
         isLoading: false,
         error: action.payload.error,
         user: null,
       };
-    case ActionType.LOGOUT_USER:
+    case UserActionType.LOGOUT_USER:
       return {
         ...state,
         isLoading: false,
         error: null,
         user: null,
       };
-    case ActionType.REFRESH_USER_START:
+    case UserActionType.REFRESH_USER_START:
       return {
         ...state,
         isRefreshing: true,
         error: null,
       };
-    case ActionType.REFRESH_USER:
+    case UserActionType.REFRESH_USER:
       return {
         ...state,
         isRefreshing: false,
         error: null,
         user: action.payload.user,
       };
-    case ActionType.REFRESH_USER_FAILED:
+    case UserActionType.REFRESH_USER_FAILED:
       return {
         ...state,
         isRefreshing: false,
         error: null,
         user: null,
       };
-    case ActionType.CLEAR_ERROR:
+    case UserActionType.CLEAR_ERROR:
       return {
         ...state,
         error: null,

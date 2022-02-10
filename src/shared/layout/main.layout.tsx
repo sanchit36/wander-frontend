@@ -1,25 +1,18 @@
 import React from 'react';
-import { chakra, Container, Flex } from '@chakra-ui/react';
+import { chakra, Container, Divider, Flex } from '@chakra-ui/react';
 import Sidebar from '../components/Navigation/Sidebar';
 import Footer from '../components/Navigation/Footer';
 
 const MainLayout: React.FC = ({ children }) => {
   return (
-    <Container
-      h='92vh'
-      pt='10'
-      maxW={{ md: 'container.md', lg: 'container.lg' }}
-    >
-      <Flex h='92vh' height='100%'>
-        <chakra.main flex='2' overflowY={'scroll'}>
+    <Container pt='10' maxW={{ md: 'container.md', lg: 'container.lg' }}>
+      <Flex>
+        <chakra.main h='86vh' flex='2' overflowY={'scroll'} margin='auto'>
           {children}
         </chakra.main>
-        <chakra.aside
-          flex='1'
-          pl='10'
-          display={{ sm: 'none', md: 'none', lg: 'block' }}
-        >
+        <chakra.aside pl='6' display={{ sm: 'none', lg: 'block' }} flex='1'>
           <Sidebar />
+          <Divider />
           <Footer />
         </chakra.aside>
       </Flex>

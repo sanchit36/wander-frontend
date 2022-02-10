@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   chakra,
   Image,
@@ -29,6 +29,8 @@ interface PostProps {
 
 const SinglePost: React.FC<PostProps> = ({ post }) => {
   const { isLoggedIn } = useAuth();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   return (
     <chakra.article
@@ -81,9 +83,12 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
           <Flex justifyContent='space-between'>
             <Box>
               <IconButton
+                onClick={() => setIsLiked((p) => !p)}
                 variant='ghost'
                 fontSize='22'
-                icon={<AiOutlineHeart />}
+                icon={
+                  isLiked ? <AiFillHeart color='red' /> : <AiOutlineHeart />
+                }
                 aria-label='like'
               />
               <IconButton
@@ -101,9 +106,10 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
             </Box>
             <Box>
               <IconButton
+                onClick={() => setIsSaved((p) => !p)}
                 variant='ghost'
                 fontSize='22'
-                icon={<RiBookmarkLine />}
+                icon={isSaved ? <RiBookmarkFill /> : <RiBookmarkLine />}
                 aria-label='save'
                 justifySelf={'flex-end'}
               />
