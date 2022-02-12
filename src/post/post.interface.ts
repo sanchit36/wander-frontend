@@ -27,4 +27,6 @@ export default interface Post {
   creator: User;
   likes: string[];
   comments: Comment[];
+  isLiked?: boolean;
+  likeCount: number;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   chakra,
   Image,
@@ -22,6 +22,8 @@ import { RiBookmarkFill, RiBookmarkLine } from 'react-icons/ri';
 import Post from '../post.interface';
 import Avatar from '../../shared/components/UIElements/Avatar';
 import useAuth from '../../shared/hooks/useAuth';
+import { useDispatch } from 'react-redux';
+import { commentPost, likePost, unlikePost } from '../../shared/state/post/post.action-creators';
 
 interface PostProps {
   post: Post;
@@ -29,8 +31,27 @@ interface PostProps {
 
 const SinglePost: React.FC<PostProps> = ({ post }) => {
   const { isLoggedIn } = useAuth();
-  const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const dispatch = useDispatch();
+
+  const commentContent = useRef<HTMLInputElement>(null);
+
+  const handleLike = () => {
+    if(post.isLiked){
+      dispatch(unlikePost(post._id));
+    }else{
+      dispatch(likePost(post._id));
+    }
+  };
+
+  const handleComment = (event: React.FormEvent) => {
+    event.preventDefault();
+    if(commentContent.current){
+      dispatch(commentPost(post._id, commentContent.current.value));
+    }else{
+      alert("Please enter a comment");
+    }
+  }
 
   return (
     <chakra.article
@@ -83,11 +104,11 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
           <Flex justifyContent='space-between'>
             <Box>
               <IconButton
-                onClick={() => setIsLiked((p) => !p)}
+                onClick={handleLike}
                 variant='ghost'
                 fontSize='22'
                 icon={
-                  isLiked ? <AiFillHeart color='red' /> : <AiOutlineHeart />
+                  post.isLiked ? <AiFillHeart color='red' /> : <AiOutlineHeart />
                 }
                 aria-label='like'
               />
@@ -122,7 +143,7 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
               mb='1'
               color={useColorModeValue('gray.600', 'gray.400')}
             >
-              100 Likes
+              {post.likeCount} Like{post.likeCount > 1 && 's'}
             </chakra.p>
             <chakra.p
               fontSize='sm'
@@ -143,7 +164,7 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
               fontSize='sm'
               color={useColorModeValue('gray.600', 'gray.400')}
             >
-              see all 50 comments
+              see all {post.comments.length} comments
             </chakra.p>
           </Box>
         </Box>
@@ -152,12 +173,12 @@ const SinglePost: React.FC<PostProps> = ({ post }) => {
       {isLoggedIn && (
         <chakra.footer>
           <Divider />
-          <Flex p={3}>
-            <Input variant='unstyled' placeholder='Write a comment...' />
-            <Button size='sm' variant='ghost'>
+          <chakra.form p={3} onSubmit={handleComment}>
+            <Input variant='unstyled' placeholder='Write a comment...' ref={commentContent} />
+            <Button size='sm' variant='ghost' type='submit'>
               Post
             </Button>
-          </Flex>
+          </chakra.form>
         </chakra.footer>
       )}
     </chakra.article>
